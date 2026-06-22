@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ТВОЁ БЕЛЬЁ — Каталог женского белья</title>
+  <meta name="description" content="ТВОЁ БЕЛЬЁ — магазин женского белья, где твой комфорт на первом месте. Бренды Conti и Milavitsa, широкий размерный ряд включая plus-size.">
+  <meta property="og:title" content="ТВОЁ БЕЛЬЁ — Каталог женского белья">
+  <meta property="og:description" content="Магазин женского белья Conti, Milavitsa и других брендов. Широкий размерный ряд, plus-size.">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     LOADING SCREEN
+══════════════════════════════════════════════════════════ -->
+<div id="loading-screen" aria-hidden="true">
+  <img class="loading-logo-img" src="images/logo.jpg" alt="ТВОЁ БЕЛЬЁ">
+  <div class="loading-logo" data-brand="name">ТВОЁ БЕЛЬЁ</div>
+  <div class="loading-bar-wrap">
+    <div class="loading-bar"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     NAVIGATION
+══════════════════════════════════════════════════════════ -->
+<nav id="main-nav" role="navigation" aria-label="Главное меню">
+  <a href="#" class="nav-logo">
+  <img class="nav-logo-img" src="images/logo.jpg" alt="ТВОЁ БЕЛЬЁ логотип">
+  <span class="nav-logo-text" data-brand="name">ТВОЁ БЕЛЬЁ</span>
+</a>
+  <ul class="nav-links">
+    <li><a href="#about">О бренде</a></li>
+    <li><a href="#catalog">Каталог</a></li>
+    <li><a href="#contacts">Контакты</a></li>
+  </ul>
+  <button class="nav-menu-btn" id="nav-menu-btn" aria-label="Открыть меню">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════════ -->
+<section class="hero" id="hero" aria-label="Главный экран">
+  <div
+    class="hero-image"
+    id="hero-image"
+    style="background-image: url('images/shapka.jpeg');"
+    role="img"
+    aria-label="Главное изображение коллекции"
+  ></div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Для каждой · Каждый день</p>
+    <h1 class="hero-title">
+      Твой комфорт —<br>
+      <em>твоя уверенность</em>
+    </h1>
+    <p class="hero-subtitle" data-brand="tagline">
+      ТВОЁ БЕЛЬЁ — магазин женского белья, где твой комфорт на первом месте
+    </p>
+    <a href="#catalog" id="catalog-btn" class="btn-primary" aria-label="Перейти к каталогу">
+      <span>Смотреть каталог</span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     ABOUT
+══════════════════════════════════════════════════════════ -->
+<section class="about" id="about" aria-label="О бренде">
+
+  <div class="about-image-wrap reveal">
+    <img
+      src="images/photo_2026-06-23_01-58-05.jpg"
+        alt="Атмосфера бренда LUMIÈRE"
+      loading="lazy"
+    >
+  </div>
+
+  <div class="about-text">
+    <div class="reveal">
+      <p class="section-label" data-brand="about_title">О нас</p>
+      <h2 class="section-title">
+        Каждая вещь — <br> это ритуал</em>
+      </h2>
+    </div>
+
+    <div class="about-divider reveal reveal-delay-1"></div>
+
+    <p class="about-body reveal reveal-delay-2" data-brand="about_text">
+      
+    </p>
+
+    <p class="about-body reveal reveal-delay-3" data-brand="about_text_2">
+      
+    </p>
+
+  <div class="reveal reveal-delay-4">
+    <p style="font-family: var(--font-serif); font-size: 2rem; font-weight: 300; font-style: italic; color: var(--blush-deep); line-height: 1.4; border-left: 2px solid var(--blush); padding-left: 28px; margin-top: 8px;">Комфорт без компромиссов для каждой.</p>
+  </div>
+  </div>
+
+
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     CATALOG
+══════════════════════════════════════════════════════════ -->
+<section class="catalog" id="catalog" aria-label="Каталог товаров">
+
+  <div class="catalog-header">
+    <div class="catalog-title-block">
+      <div class="reveal">
+        <h2 class="section-title">Наш <em>каталог</em></h2>
+      </div>
+      <!-- Category tabs (built by JS) -->
+      <div class="filter-tabs reveal reveal-delay-2" id="filter-tabs" role="group" aria-label="Фильтр по категориям"></div>
+    </div>
+  </div>
+
+  <!-- ── Filter Panel ── -->
+  <div class="filter-panel reveal" id="filter-panel">
+
+    <!-- Search -->
+    <div class="search-row">
+      <input
+        class="search-input"
+        id="search-input"
+        type="text"
+        placeholder="Поиск по названию, описанию, тегам…"
+        autocomplete="off"
+        aria-label="Поиск товаров"
+      >
+      <button class="search-clear" id="search-clear" aria-label="Очистить поиск">×</button>
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.3"/>
+        <path d="M11 11L14 14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <!-- Price -->
+    <div class="filter-row">
+      <span class="filter-row-label">Цена</span>
+      <div class="price-range-wrap">
+        <div class="price-input-group">
+          <span class="price-val" id="price-min-val">0 ₽</span>
+        </div>
+        <div class="price-slider-track" id="price-track">
+          <div class="price-slider-fill" id="price-fill"></div>
+          <input class="price-slider" id="price-min" type="range" min="0" max="5000" value="0" step="50" aria-label="Минимальная цена">
+          <input class="price-slider" id="price-max" type="range" min="0" max="5000" value="5000" step="50" aria-label="Максимальная цена">
+        </div>
+        <div class="price-input-group">
+          <span class="price-val" id="price-max-val">5 000 ₽</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Size -->
+    <div class="filter-row">
+      <span class="filter-row-label">Размер</span>
+      <div class="size-btn-group" id="size-btn-group" role="group" aria-label="Фильтр по размеру">
+        <!-- Built by JS -->
+      </div>
+    </div>
+
+    <!-- Brand -->
+    <div class="filter-row">
+      <span class="filter-row-label">Бренд</span>
+      <div class="brand-btn-group" id="brand-btn-group" role="group" aria-label="Фильтр по бренду">
+        <!-- Built by JS -->
+      </div>
+    </div>
+
+    <!-- Sort + New only -->
+    <div class="sort-row">
+      <select class="sort-select" id="sort-select" aria-label="Сортировка">
+        <option value="default">Сортировка: по умолчанию</option>
+        <option value="price-asc">Сначала дешевле</option>
+        <option value="price-desc">Сначала дороже</option>
+        <option value="name-asc">По названию А–Я</option>
+        <option value="name-desc">По названию Я–А</option>
+        <option value="new">Сначала новинки</option>
+      </select>
+
+      <label class="new-only-toggle" for="new-only-check" aria-label="Только новинки">
+        <input type="checkbox" id="new-only-check">
+        <div class="toggle-track"></div>
+        <span class="toggle-label">Только новинки</span>
+      </label>
+    </div>
+
+  </div>
+
+  <!-- Results bar -->
+  <div class="results-bar">
+    <p class="results-count" id="results-count"><strong>0</strong> товаров</p>
+    <button class="reset-filters-btn" id="reset-filters-btn">Сбросить фильтры</button>
+  </div>
+
+  <!-- Products grid (built by JS) -->
+  <div class="products-grid" id="products-grid" role="list" aria-label="Список товаров">
+    <div class="empty-state" id="empty-state">
+      <div class="empty-state-icon">🔍</div>
+      <p class="empty-state-title">Ничего не найдено</p>
+      <p class="empty-state-sub">Попробуйте изменить параметры поиска или сбросить фильтры</p>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     FOOTER / CONTACTS
+══════════════════════════════════════════════════════════ -->
+<footer id="contacts" aria-label="Контакты и информация">
+
+  <div class="footer-top">
+
+    <div class="footer-brand reveal">
+      <div class="footer-brand-name" style="display:flex;align-items:center;gap:12px;">
+        <img src="images/logo.jpg" alt="Логотип" style="width:48px;height:48px;object-fit:contain;border-radius:8px;">
+        <span data-brand="name">ТВОЁ БЕЛЬЁ</span>
+      </div>
+      <p class="footer-tagline" data-brand="tagline">ТВОЁ БЕЛЬЁ — магазин женского белья</p>
+    </div>
+
+    <div class="reveal reveal-delay-1">
+      <p class="footer-col-title">Разделы</p>
+      <ul class="footer-links">
+        <li><a href="#about">О бренде</a></li>
+        <li><a href="#catalog">Каталог</a></li>
+        <li><a href="#contacts">Контакты</a></li>
+      </ul>
+    </div>
+
+    <div class="reveal reveal-delay-2" id="contacts-col">
+      <p class="footer-col-title">Связаться с нами</p>
+      <div class="footer-contact-item">
+        <div class="footer-contact-line">
+          <small>Instagram</small>
+          <a href="#" data-brand="contact_instagram" target="_blank" rel="noopener">@tvoye.belye</a>
+        </div>
+        <div class="footer-contact-line">
+          <small>Телефон</small>
+          <a href="tel:" data-brand="contact_phone">+7 (495) 123-45-67</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p class="footer-copyright">
+      © 2026 <span data-brand="name">LUMIÈRE</span>. Все права защищены.
+    </p>
+    <div class="footer-social">
+      <a href="#" target="_blank" rel="noopener" data-brand="contact_instagram">Instagram</a>
+    </div>
+  </div>
+
+</footer>
+
+<!-- ══════════════════════════════════════════════════════════
+     PRODUCT MODAL
+══════════════════════════════════════════════════════════ -->
+<div
+  class="modal-backdrop"
+  id="modal-backdrop"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Информация о товаре"
+>
+  <div class="modal" id="modal">
+    <img
+      class="modal-image"
+      id="modal-image"
+      src=""
+      alt=""
+    >
+    <div class="modal-content">
+      <p class="modal-category" id="modal-category"></p>
+      <h2 class="modal-name"   id="modal-name"></h2>
+      <p class="modal-price"   id="modal-price" style="font-family:var(--font-serif);font-size:1.6rem;font-weight:300;color:var(--blush-deep);margin:4px 0 0;"></p>
+      <div class="modal-divider"></div>
+      <p class="modal-desc"    id="modal-desc"></p>
+
+
+      <div>
+        <p class="modal-sizes-label">Доступные размеры</p>
+        <div class="modal-sizes" id="modal-sizes"></div>
+      </div>
+
+      <div class="modal-tags" id="modal-tags"></div>
+
+      <div class="modal-contact">
+        <span id="modal-contact-text"></span>:<br>
+        <a href="#" id="modal-instagram"></a>
+      </div>
+    </div>
+
+    <button class="modal-close" id="modal-close" aria-label="Закрыть">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════════════════════ -->
+<script src="script.js"></script>
+
+</body>
+</html>
