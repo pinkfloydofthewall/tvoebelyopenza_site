@@ -19,8 +19,32 @@ document.addEventListener('DOMContentLoaded', () => {
   initDeleteModal();
   initBrandForm();
   initCategories();
+  initDeploy();
   loadData();
 });
+
+/* ── Deploy ────────────────────────────────────────────────── */
+function initDeploy() {
+  document.getElementById('btn-deploy').addEventListener('click', async () => {
+    const btn = document.getElementById('btn-deploy');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '⏳ Публикация...';
+    btn.disabled = true;
+    toast('Отправляем на сайт...', 'info');
+
+    try {
+      const res = await fetch('/api/deploy', { method: 'POST' });
+      const body = await res.json();
+      if (!body.ok) throw new Error(body.error);
+      toast('Опубликовано! Сайт обновится через ~20 секунд.', 'success');
+    } catch (e) {
+      toast('Ошибка публикации: ' + e.message, 'error');
+    } finally {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
+  });
+}
 
 /* ── Data ──────────────────────────────────────────────────── */
 async function loadData() {

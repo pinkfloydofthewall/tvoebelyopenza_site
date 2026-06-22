@@ -178,6 +178,20 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  /* ── POST /api/deploy ── */
+  if (method === 'POST' && url.pathname === '/api/deploy') {
+    const { exec } = require('child_process');
+    exec('git add . && git commit -m "Авто-обновление из админки" && git push', { cwd: ROOT }, (error, stdout, stderr) => {
+      // If error is just "nothing to commit", it's fine.
+      if (error && !stdout.includes('nothing to commit')) {
+        json(res, 500, { ok: false, error: stderr || error.message });
+        return;
+      }
+      json(res, 200, { ok: true });
+    });
+    return;
+  }
+
   /* ── Static files ── */
   let filePath = path.join(ROOT, url.pathname === '/' ? 'index.html' : url.pathname);
   // Prevent directory traversal

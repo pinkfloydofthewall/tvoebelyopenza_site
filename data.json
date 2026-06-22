@@ -25,7 +25,7 @@
   "products": [
     {
       "id": 1,
-      "name": "лада няша",
+      "name": "Комплект Blanc",
       "category": "Комплекты",
       "brand": "Milavitsa",
       "price": 2890,
@@ -153,9 +153,9 @@
     },
     {
       "id": 7,
-      "name": "Боди хуйня",
+      "name": "Комплект ABCD",
       "category": "Комплекты",
-      "description": "Для истинных говнарей",
+      "description": "Что-то там что-то там я мартин",
       "image": "images/product_1782168294194.jpg",
       "tags": [
         "Кружево",
