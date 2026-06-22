@@ -167,6 +167,16 @@
         "53"
       ],
       "featured": false
+    },
+    {
+      "id": 8,
+      "name": "Тест",
+      "category": "Комплекты",
+      "description": "вавав",
+      "image": "images/product_1782171472406.jpg",
+      "tags": [],
+      "available_sizes": [],
+      "featured": false
     }
   ]
 }
