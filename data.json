@@ -332,7 +332,8 @@
         "3",
         "4"
       ],
-      "featured": false
+      "featured": false,
+      "price": 800
     },
     {
       "id": 19,
@@ -352,7 +353,8 @@
       "available_sizes": [
         "5"
       ],
-      "featured": false
+      "featured": false,
+      "price": 960
     }
   ]
 }
