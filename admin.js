@@ -142,6 +142,8 @@ function productCardHTML(p) {
     ? `<span class="featured-badge">⭐ Выделенный</span>` : '';
   const priceBadge = p.price
     ? `<span class="featured-badge" style="background:rgba(255,255,255,.05); border-color:var(--border); color:var(--text); margin-right:auto; margin-left:0;">${p.price} ₽</span>` : '';
+  const colorBadge = p.color
+    ? `<span class="featured-badge" style="background:rgba(255,255,255,.05); border-color:var(--border); color:var(--text); margin-right:auto; margin-left:4px;">🎨 ${escHtml(p.color)}</span>` : '';
 
   return `
     <article class="product-card">
@@ -152,6 +154,7 @@ function productCardHTML(p) {
         <div class="product-card-desc">${escHtml(p.description || '')}</div>
         <div class="product-card-footer">
           ${priceBadge}
+          ${colorBadge}
           ${featuredBadge}
         </div>
       </div>
@@ -214,6 +217,7 @@ function openEditModal(id) {
   renderCategorySelect(product.category);
   document.getElementById('product-name').value = product.name || '';
   document.getElementById('product-price').value = product.price || '';
+  document.getElementById('product-color').value = product.color || '';
   document.getElementById('product-description').value = product.description || '';
   document.getElementById('product-featured').checked = !!product.featured;
 
@@ -242,6 +246,7 @@ function closeProductModal() {
 function clearProductForm() {
   document.getElementById('product-name').value = '';
   document.getElementById('product-price').value = '';
+  document.getElementById('product-color').value = '';
   document.getElementById('product-description').value = '';
   document.getElementById('product-featured').checked = false;
   setChips('tags-wrap', 'tags-input', []);
@@ -254,6 +259,7 @@ async function saveProduct() {
   const category = document.getElementById('product-category').value;
   const priceVal = document.getElementById('product-price').value.trim();
   const price = priceVal ? parseInt(priceVal, 10) : null;
+  const color = document.getElementById('product-color').value.trim();
 
   if (!name) { toast('Введите название товара', 'error'); return; }
   if (!category) { toast('Выберите категорию', 'error'); return; }
@@ -277,7 +283,7 @@ async function saveProduct() {
       if (idx !== -1) {
         data.products[idx] = {
           ...data.products[idx],
-          name, category, price, description: desc,
+          name, category, price, color, description: desc,
           tags, available_sizes: sizes,
           featured, image: imagePath,
         };
@@ -287,7 +293,7 @@ async function saveProduct() {
       const maxId = data.products.reduce((m, p) => Math.max(m, p.id || 0), 0);
       data.products.push({
         id: maxId + 1,
-        name, category, price, description: desc,
+        name, category, price, color, description: desc,
         image: imagePath,
         tags, available_sizes: sizes, featured,
       });

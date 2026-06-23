@@ -367,6 +367,7 @@ function createProductCard(product, idx) {
   card.setAttribute('data-category', product.category);
   card.setAttribute('data-id', product.id);
 
+  const colorHTML = product.color ? `<span class="card-tag" style="background:var(--rose-glow); border:1px solid rgba(201,160,160,.3); color:var(--rose);">Цвет: ${product.color}</span>` : '';
   const tagsHTML = (product.tags || []).map(t => `<span class="card-tag">${t}</span>`).join('');
   const sizesHTML = (product.available_sizes || []).join(' · ');
   const priceHTML = product.price
@@ -386,7 +387,7 @@ function createProductCard(product, idx) {
       <p class="card-category">${product.category}${product.brand ? ' · ' + product.brand : ''}</p>
       <h3 class="card-name">${product.name}</h3>
       <p class="card-desc">${product.description}</p>
-      <div class="card-tags">${tagsHTML}</div>
+      <div class="card-tags">${colorHTML}${tagsHTML}</div>
     </div>
     <div class="card-footer">
       <div>
@@ -452,7 +453,8 @@ function openModal(productId) {
   // Sizes are informational only — no selection in catalog mode
 
   const tagsEl = document.getElementById('modal-tags');
-  tagsEl.innerHTML = (product.tags || []).map(t => `<span class="modal-tag">${t}</span>`).join('');
+  const colorHTML = product.color ? `<span class="modal-tag" style="background:var(--rose-glow); border:1px solid rgba(201,160,160,.3); color:var(--rose);">Цвет: ${product.color}</span>` : '';
+  tagsEl.innerHTML = colorHTML + (product.tags || []).map(t => `<span class="modal-tag">${t}</span>`).join('');
 
   const b = catalogData.brand;
   document.getElementById('modal-contact-text').textContent = b.contact_text;

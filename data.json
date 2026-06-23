@@ -258,7 +258,9 @@
         "4",
         "5"
       ],
-      "featured": false
+      "featured": false,
+      "price": null,
+      "color": "NATURAL, NERO"
     },
     {
       "id": 15,
