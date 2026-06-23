@@ -187,7 +187,7 @@
       "image": "images/product_1782244160924.jpg",
       "tags": [
         "Цвет: MOCCO",
-        "20 den"
+        "20 DEN"
       ],
       "available_sizes": [
         "2",
@@ -198,14 +198,35 @@
     {
       "id": 10,
       "name": "Conte ACTIVE XXL",
-      "category": "Комплекты",
+      "category": "Колготки",
       "description": "Полупрозрачные колготки с утягивающими шортиками Active 40 моделируют фигуру, визуально уменьшая объём бёдер, талии и живота. Распределенное давление по ноге помогает предотвратить усталость и отечность.",
       "image": "images/product_1782244747864.jpg",
       "tags": [
-        "Цвет: Nero",
-        "Цвет: Natural"
+        "Цвет: NERO",
+        "Цвет: NATURAL",
+        "40 DEN"
       ],
       "available_sizes": [
+        "6"
+      ],
+      "featured": false
+    },
+    {
+      "id": 11,
+      "name": "Conte ACTIVE SOFT",
+      "category": "Колготки",
+      "description": "Колготки созданы специально для чувствительной кожи: полотно обработано микрокапсулами с витамином Е, бережно ухаживающими за кожей ног.",
+      "image": "images/product_1782244958612.jpg",
+      "tags": [
+        "Цвет: BRONZE",
+        "Цвет: NERO",
+        "40 DEN"
+      ],
+      "available_sizes": [
+        "2",
+        "3",
+        "4",
+        "5",
         "6"
       ],
       "featured": false
