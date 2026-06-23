@@ -266,6 +266,46 @@
         "5"
       ],
       "featured": false
+    },
+    {
+      "id": 14,
+      "name": "Conte SLIMFIT",
+      "category": "Колготки",
+      "description": "Шелковистые колготки с широким утягивающими поясом моделируют фигуру, визуально уменьшая объём талии и создавая эффект плоского живота.",
+      "image": "images/product_1782245700469.jpg",
+      "tags": [
+        "Цвет: NATURAL",
+        "Цвет: NERO",
+        "40 DEN"
+      ],
+      "available_sizes": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "featured": false
+    },
+    {
+      "id": 15,
+      "name": "Conte STYLE",
+      "category": "Колготки",
+      "description": "Их особенность - утягивающие трусики плотностью 90 Den, которые скорректируют фигуру, подтянув проблемные зоны.",
+      "image": "images/product_1782245878749.jpg",
+      "tags": [
+        "Цвет: MOCCA",
+        "Цвет: NATURAL",
+        "Цвет: NERO",
+        "Цвет: SHADE",
+        "Цвет: BRONZE",
+        "40 DEN"
+      ],
+      "available_sizes": [
+        "2",
+        "3",
+        "4"
+      ],
+      "featured": false
     }
   ]
 }
