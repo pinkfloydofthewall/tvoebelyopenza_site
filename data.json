@@ -110,28 +110,6 @@
       "featured": false
     },
     {
-      "id": 5,
-      "name": "Комплект «Velours»",
-      "category": "Комплекты",
-      "brand": "Milavitsa",
-      "price": 3200,
-      "new": false,
-      "description": "Роскошный комплект из бархата и кружева цвета бордо. Бюстгальтер с мягкими чашками и трусики с высокой талией.",
-      "image": "images/product_5.png",
-      "tags": [
-        "Бархат",
-        "Кружево",
-        "Высокая талия"
-      ],
-      "available_sizes": [
-        "S",
-        "M",
-        "L",
-        "XL"
-      ],
-      "featured": true
-    },
-    {
       "id": 6,
       "name": "Бралет «Fleur»",
       "category": "Бюстгальтеры",
