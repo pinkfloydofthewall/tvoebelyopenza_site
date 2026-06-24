@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ── Data Loading ───────────────────────────────────────────── */
 async function loadData() {
   try {
-    const res = await fetch('data.json');
+    const res = await fetch('data.json?_=' + new Date().getTime());
     if (!res.ok) throw new Error('Failed to load data.json');
     catalogData = await res.json();
   } catch (e) {
