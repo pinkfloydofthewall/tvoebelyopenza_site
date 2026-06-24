@@ -37,8 +37,9 @@ async function loadData() {
     catalogData = getFallbackData();
   }
 
-  // Set price range max from actual data
-  const maxPrice = Math.max(...catalogData.products.map(p => p.price || 0));
+  // Set price range max from actual data, rounding up to nearest 50 for the slider step
+  const rawMax = Math.max(...catalogData.products.map(p => p.price || 0));
+  const maxPrice = Math.ceil(rawMax / 50) * 50;
   filters.priceMax = maxPrice;
   const priceMaxEl = document.getElementById('price-max');
   const priceMinEl = document.getElementById('price-min');
