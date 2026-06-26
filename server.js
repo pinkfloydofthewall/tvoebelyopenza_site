@@ -236,7 +236,12 @@ const server = http.createServer((req, res) => {
               if (row.characteristics) {
                 row.characteristics.forEach(c => {
                   const name = c.name.toLowerCase();
-                  if (name === 'размер') parent.sizes.add(c.value);
+                  if (name === 'размер') {
+                    let val = c.value.trim().toUpperCase().replace(/-0$/, '');
+                    const match = val.match(/^(\d{2,3})[\s\-\/]*([A-Z]+)$/);
+                    if (match) val = match[1] + match[2];
+                    parent.sizes.add(val);
+                  }
                   if (name === 'цвет') parent.colors.add(c.value);
                 });
               }
