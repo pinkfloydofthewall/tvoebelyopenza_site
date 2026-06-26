@@ -34,6 +34,9 @@
       <button class="nav-item" data-section="brand" id="nav-brand">
         <span class="icon">✨</span> Бренд
       </button>
+      <button class="nav-item" data-section="moysklad" id="nav-moysklad">
+        <span class="icon">📦</span> МойСклад
+      </button>
     </nav>
 
     <div class="sidebar-footer" style="display:flex; flex-direction:column; gap:8px;">
@@ -167,6 +170,42 @@
           <label for="brand-contact-text">Текст контактного блока</label>
           <input type="text" id="brand-contact-text" placeholder="Для уточнения наличия…">
         </div>
+      </div>
+    </section>
+
+    <!-- ── MOYSKLAD ── -->
+    <section class="page-section" id="section-moysklad" aria-labelledby="moysklad-heading">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title" id="moysklad-heading">Интеграция с МойСклад</h1>
+          <p class="page-subtitle">Автоматическая выгрузка товаров</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label for="moysklad-token">Токен доступа (API Key)</label>
+          <input type="password" id="moysklad-token" placeholder="Ваш токен от МойСклад...">
+          <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 4px;">
+            Можно получить в настройках пользователя МойСклад.
+          </p>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <button class="btn btn-primary" id="btn-sync-moysklad">
+            🔄 Синхронизировать сейчас
+          </button>
+          <span id="moysklad-sync-status" style="font-size: 0.9rem; color: var(--text-dim);"></span>
+        </div>
+
+        <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 16px; line-height: 1.4;">
+          <strong>Как это работает:</strong><br>
+          Мы скачаем все товары и их модификации (Размер, Цвет). Если товар с таким именем уже есть, 
+          мы обновим его цену, доступные размеры и цвета, сохранив ваше описание и фото. 
+          Новые товары будут добавлены без фотографий (вы сможете загрузить их в разделе "Товары").
+        </p>
       </div>
     </section>
 

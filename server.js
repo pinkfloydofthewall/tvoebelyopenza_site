@@ -158,6 +158,168 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  /* ── GET /api/moysklad-token ── */
+  if (method === 'GET' && url.pathname === '/api/moysklad-token') {
+    try {
+      const cfgPath = path.join(ROOT, 'moysklad-config.json');
+      if (fs.existsSync(cfgPath)) {
+        const cfg = JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
+        json(res, 200, { ok: true, token: cfg.token || '' });
+      } else {
+        json(res, 200, { ok: true, token: '' });
+      }
+    } catch(e) {
+      json(res, 500, { ok: false, error: e.message });
+    }
+    return;
+  }
+
+  /* ── POST /api/moysklad-sync ── */
+  if (method === 'POST' && url.pathname === '/api/moysklad-sync') {
+    readBody(req).then(async buf => {
+      try {
+        const { token } = JSON.parse(buf.toString());
+        if (!token) return json(res, 400, { ok: false, error: 'Token is required' });
+
+        // Save token to config
+        fs.writeFileSync(path.join(ROOT, 'moysklad-config.json'), JSON.stringify({ token }));
+
+        // Fetch from MoySklad with pagination
+        let allRows = [];
+        let offset = 0;
+        const limit = 1000;
+        
+        while (true) {
+          const msRes = await fetch(`https://api.moysklad.ru/api/remap/1.2/entity/assortment?limit=${limit}&offset=${offset}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          
+          if (!msRes.ok) {
+            const errText = await msRes.text();
+            throw new Error(`Moysklad API Error: ${msRes.status} ${errText}`);
+          }
+
+          const msData = await msRes.json();
+          const rows = msData.rows || [];
+          allRows = allRows.concat(rows);
+          
+          if (rows.length < limit) break;
+          offset += limit;
+        }
+
+        const msProducts = {}; // id -> product
+
+        // First pass: collect products
+        for (const row of allRows) {
+          if (row.meta.type === 'product') {
+            msProducts[row.id] = {
+              name: row.name,
+              price: row.salePrices && row.salePrices[0] ? row.salePrices[0].value / 100 : null,
+              pathName: row.pathName || '',
+              sizes: new Set(),
+              colors: new Set()
+            };
+          }
+        }
+
+        // Second pass: collect variants
+        for (const row of allRows) {
+          if (row.meta.type === 'variant' && row.product && row.product.meta) {
+            const parentUrl = row.product.meta.href;
+            const parentId = parentUrl.substring(parentUrl.lastIndexOf('/') + 1);
+            
+            const parent = msProducts[parentId];
+            if (parent) {
+              if (row.salePrices && row.salePrices[0]) {
+                parent.price = row.salePrices[0].value / 100;
+              }
+              if (row.characteristics) {
+                row.characteristics.forEach(c => {
+                  const name = c.name.toLowerCase();
+                  if (name === 'размер') parent.sizes.add(c.value);
+                  if (name === 'цвет') parent.colors.add(c.value);
+                });
+              }
+            }
+          }
+        }
+
+        // Read local data.json
+        const localDataBuf = fs.readFileSync(DATA, 'utf8');
+        const catalog = JSON.parse(localDataBuf);
+        catalog.products = catalog.products || [];
+        
+        let updated = 0;
+        let added = 0;
+
+        for (const msId in msProducts) {
+          const msp = msProducts[msId];
+          const mKey = msp.name.trim().toLowerCase();
+          
+          // 1. Try match by moysklad_id
+          let p = catalog.products.find(x => x.moysklad_id === msId);
+          
+          // 2. Try exact name match
+          if (!p) p = catalog.products.find(x => x.name.trim().toLowerCase() === mKey);
+          
+          // 3. Try fuzzy name match (substring)
+          if (!p) {
+            const sortedLocals = catalog.products.slice().sort((a,b) => b.name.length - a.name.length);
+            for (const loc of sortedLocals) {
+              const locKey = loc.name.trim().toLowerCase();
+              if (locKey.length > 5 && (mKey.includes(locKey) || locKey.includes(mKey))) {
+                p = loc;
+                break;
+              }
+            }
+          }
+
+          const sizeArr = Array.from(msp.sizes).sort();
+          const colorStr = Array.from(msp.colors).join(', ');
+
+          if (p) {
+            // Update existing
+            p.moysklad_id = msId;
+            p.price = msp.price !== null ? msp.price : p.price;
+            p.available_sizes = sizeArr.length > 0 ? sizeArr : p.available_sizes;
+            p.color = colorStr || p.color;
+            updated++;
+          } else {
+            // Add new
+            let cat = 'Все';
+            const pn = msp.pathName.toLowerCase();
+            if (pn.includes('белье')) cat = 'Бюстгальтеры';
+            if (pn.includes('колготки')) cat = 'Колготки';
+            if (pn.includes('трусики')) cat = 'Трусики';
+            if (pn.includes('боди')) cat = 'Боди';
+            
+            const maxId = catalog.products.reduce((m, x) => Math.max(m, x.id || 0), 0);
+            p = {
+              id: maxId + 1,
+              moysklad_id: msId,
+              name: msp.name,
+              category: cat,
+              price: msp.price,
+              featured: false
+            };
+            if (sizeArr.length > 0) p.available_sizes = sizeArr;
+            if (colorStr) p.color = colorStr;
+            
+            catalog.products.push(p);
+            added++;
+          }
+        }
+
+        fs.writeFileSync(DATA, JSON.stringify(catalog, null, 2), 'utf8');
+
+        json(res, 200, { ok: true, added, updated });
+      } catch (e) {
+        json(res, 500, { ok: false, error: e.message });
+      }
+    }).catch(e => json(res, 500, { ok: false, error: e.message }));
+    return;
+  }
+
   /* ── DELETE /api/delete-image?file=images/xxx.jpg ── */
   if (method === 'DELETE' && url.pathname === '/api/delete-image') {
     const file = url.searchParams.get('file');

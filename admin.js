@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initBrandForm();
   initCategories();
   initDeploy();
+  initMoySklad();
   loadData();
 });
 
@@ -42,6 +43,61 @@ function initDeploy() {
     } finally {
       btn.innerHTML = originalText;
       btn.disabled = false;
+    }
+  });
+}
+
+/* ── MoySklad ──────────────────────────────────────────────── */
+async function initMoySklad() {
+  const tokenInput = document.getElementById('moysklad-token');
+  const syncBtn = document.getElementById('btn-sync-moysklad');
+  const statusSpan = document.getElementById('moysklad-sync-status');
+
+  // Load existing token
+  try {
+    const res = await fetch('/api/moysklad-token');
+    const body = await res.json();
+    if (body.ok && body.token) {
+      tokenInput.value = body.token;
+    }
+  } catch (e) {
+    console.warn('Could not load MoySklad token', e);
+  }
+
+  syncBtn.addEventListener('click', async () => {
+    const token = tokenInput.value.trim();
+    if (!token) {
+      toast('Введите токен МойСклад', 'error');
+      return;
+    }
+
+    const originalText = syncBtn.innerHTML;
+    syncBtn.innerHTML = '⏳ Синхронизация (загрузка...)';
+    syncBtn.disabled = true;
+    statusSpan.textContent = '';
+    toast('Синхронизация начата. Это может занять несколько секунд.', 'info');
+
+    try {
+      const res = await fetch('/api/moysklad-sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token }),
+      });
+      const body = await res.json();
+      
+      if (!body.ok) throw new Error(body.error);
+      
+      statusSpan.textContent = `Успех! Обновлено: ${body.updated}, Добавлено: ${body.added}.`;
+      toast(`Синхронизация завершена! Обновлено: ${body.updated}, Добавлено: ${body.added}.`, 'success');
+      
+      // Reload data
+      await loadData();
+    } catch (e) {
+      statusSpan.textContent = 'Ошибка: ' + e.message;
+      toast('Ошибка синхронизации: ' + e.message, 'error');
+    } finally {
+      syncBtn.innerHTML = originalText;
+      syncBtn.disabled = false;
     }
   });
 }
