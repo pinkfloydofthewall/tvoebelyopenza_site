@@ -440,10 +440,10 @@ section {
 /* ── About Section ────────────────────────────────────────── */
 .about {
   background: var(--cream);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
   padding: 120px 60px;
 }
 
@@ -482,6 +482,9 @@ section {
 .about-text {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  max-width: 800px;
+  margin: 0 auto;
   gap: 32px;
 }
 
