@@ -18,6 +18,7 @@ const filters = {
   sizes:     new Set(),   // simple sizes (tights, panties)
   bandSizes: new Set(),   // bra band sizes (70, 75, 80...)
   cupSizes:  new Set(),   // bra cup sizes (A, B, C...)
+  activeSizeCategory: null, // enforces mutual exclusivity across categories
   brands:    new Set(),   // selected brands
   newOnly:   false,
   sort:      'default'
@@ -129,17 +130,17 @@ function buildSizeButtons() {
       catLabel.textContent = cat;
       container.appendChild(catLabel);
 
-      renderSizeGroup(container, sizes);
+      renderSizeGroup(container, sizes, cat);
     });
   } else {
     const relevantProducts = catalogData.products.filter(p => p.category === activeCategory);
     const allSizes = [...new Set(relevantProducts.flatMap(p => p.available_sizes || []))];
     if (allSizes.length === 0) return;
-    renderSizeGroup(container, allSizes);
+    renderSizeGroup(container, allSizes, activeCategory);
   }
 }
 
-function renderSizeGroup(container, allSizes) {
+function renderSizeGroup(container, allSizes, catName) {
   const isBraSizing = allSizes.some(s => /^\d{2,3}[A-ZА-Я]/.test(s));
 
   if (isBraSizing) {
@@ -162,6 +163,13 @@ function renderSizeGroup(container, allSizes) {
       btn.textContent = band;
       btn.dataset.band = band;
       btn.addEventListener('click', () => {
+        if (filters.activeSizeCategory !== catName) {
+           filters.sizes.clear();
+           filters.bandSizes.clear();
+           filters.cupSizes.clear();
+           document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+           filters.activeSizeCategory = catName;
+        }
         if (filters.bandSizes.has(band)) {
           filters.bandSizes.delete(band);
           btn.classList.remove('active');
@@ -189,6 +197,13 @@ function renderSizeGroup(container, allSizes) {
       btn.textContent = cup;
       btn.dataset.cup = cup;
       btn.addEventListener('click', () => {
+        if (filters.activeSizeCategory !== catName) {
+           filters.sizes.clear();
+           filters.bandSizes.clear();
+           filters.cupSizes.clear();
+           document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+           filters.activeSizeCategory = catName;
+        }
         if (filters.cupSizes.has(cup)) {
           filters.cupSizes.delete(cup);
           btn.classList.remove('active');
@@ -216,6 +231,13 @@ function renderSizeGroup(container, allSizes) {
       btn.textContent = size;
       btn.dataset.size = size;
       btn.addEventListener('click', () => {
+        if (filters.activeSizeCategory !== catName) {
+           filters.sizes.clear();
+           filters.bandSizes.clear();
+           filters.cupSizes.clear();
+           document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+           filters.activeSizeCategory = catName;
+        }
         if (filters.sizes.has(size)) {
           filters.sizes.delete(size);
           btn.classList.remove('active');
@@ -365,6 +387,7 @@ function resetFilters() {
   filters.sizes.clear();
   filters.bandSizes.clear();
   filters.cupSizes.clear();
+  filters.activeSizeCategory = null;
   filters.brands.clear();
   filters.newOnly  = false;
   filters.sort     = 'default';
