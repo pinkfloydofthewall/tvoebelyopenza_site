@@ -112,19 +112,37 @@ function buildSizeButtons() {
   const container = document.getElementById('size-btn-group');
   container.innerHTML = '';
 
-  // Get products for the active category
-  const relevantProducts = activeCategory === 'Все'
-    ? catalogData.products
-    : catalogData.products.filter(p => p.category === activeCategory);
+  if (activeCategory === 'Все') {
+    // Group sizes by category
+    const catSizes = {};
+    catalogData.products.forEach(p => {
+      if (!p.available_sizes || p.available_sizes.length === 0) return;
+      if (!catSizes[p.category]) catSizes[p.category] = new Set();
+      p.available_sizes.forEach(s => catSizes[p.category].add(s));
+    });
 
-  const allSizes = [...new Set(relevantProducts.flatMap(p => p.available_sizes || []))];
-  if (allSizes.length === 0) return;
+    // Render each category group
+    Object.keys(catSizes).forEach(cat => {
+      const sizes = [...catSizes[cat]];
+      const catLabel = document.createElement('span');
+      catLabel.className = 'size-catlabel';
+      catLabel.textContent = cat;
+      container.appendChild(catLabel);
 
-  // Check if this is bra sizing (format: number+letter like 75B, 80C)
-  const isBraSizing = allSizes.some(s => /^\d{2,3}[A-Z]/.test(s));
+      renderSizeGroup(container, sizes);
+    });
+  } else {
+    const relevantProducts = catalogData.products.filter(p => p.category === activeCategory);
+    const allSizes = [...new Set(relevantProducts.flatMap(p => p.available_sizes || []))];
+    if (allSizes.length === 0) return;
+    renderSizeGroup(container, allSizes);
+  }
+}
+
+function renderSizeGroup(container, allSizes) {
+  const isBraSizing = allSizes.some(s => /^\d{2,3}[A-ZА-Я]/.test(s));
 
   if (isBraSizing) {
-    // Split into bands (70,75,80...) and cups (A,B,C...)
     const bands = [...new Set(allSizes.map(s => s.match(/^(\d{2,3})/)?.[1]).filter(Boolean))]
       .sort((a, b) => parseInt(a) - parseInt(b));
     const cups = [...new Set(allSizes.map(s => s.match(/^\d{2,3}([A-ZА-Я]+)/)?.[1]).filter(Boolean))]
@@ -184,12 +202,14 @@ function buildSizeButtons() {
     });
     container.appendChild(cupRow);
   } else {
-    // Simple sizes (tights: 2,3,4,5,6 or panties: 36,38,40...)
-    const sorted = allSizes.sort((a, b) => {
+    // Simple sizes
+    const sorted = [...allSizes].sort((a, b) => {
       const na = parseInt(a), nb = parseInt(b);
       if (!isNaN(na) && !isNaN(nb)) return na - nb;
       return a.localeCompare(b);
     });
+    const row = document.createElement('div');
+    row.className = 'size-subrow';
     sorted.forEach(size => {
       const btn = document.createElement('button');
       btn.className = 'size-btn';
@@ -205,8 +225,9 @@ function buildSizeButtons() {
         }
         applyFilters();
       });
-      container.appendChild(btn);
+      row.appendChild(btn);
     });
+    container.appendChild(row);
   }
 }
 

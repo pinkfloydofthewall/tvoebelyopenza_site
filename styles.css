@@ -77,6 +77,9 @@ body {
   color: var(--charcoal);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  letter-spacing: 0.01em;
 }
 
 img {
@@ -403,7 +406,7 @@ nav.scrolled .nav-menu-btn span {
 
 .hero-scroll-hint span {
   font-family: var(--font-sans);
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: rgba(255,255,255,0.6);
@@ -429,7 +432,7 @@ section {
 
 .section-label {
   font-family: var(--font-sans);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 400;
   letter-spacing: 0.3em;
   text-transform: uppercase;
@@ -653,7 +656,7 @@ section {
 
 .search-input::placeholder {
   color: var(--taupe-light);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.1em;
 }
 
 .search-input:focus {
@@ -699,7 +702,7 @@ section {
 
 .filter-row-label {
   font-family: var(--font-sans);
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--taupe-light);
@@ -794,7 +797,7 @@ section {
 .size-sublabel {
   width: 100%;
   font-family: var(--font-sans);
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--taupe-light);
@@ -803,6 +806,24 @@ section {
 }
 
 .size-sublabel:first-child {
+  margin-top: 0;
+}
+
+.size-catlabel {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blush-deep);
+  margin-top: 14px;
+  margin-bottom: 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--blush-light);
+}
+
+.size-catlabel:first-child {
   margin-top: 0;
 }
 
@@ -815,8 +836,8 @@ section {
 
 .size-btn {
   font-family: var(--font-sans);
-  font-size: 0.65rem;
-  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
   color: var(--taupe);
   background: transparent;
   border: 1px solid var(--blush-light);
@@ -845,8 +866,8 @@ section {
 
 .brand-btn {
   font-family: var(--font-sans);
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
   color: var(--taupe);
   background: transparent;
   border: 1px solid var(--blush-light);
@@ -941,7 +962,7 @@ section {
   font-family: var(--font-sans);
   font-size: 0.72rem;
   color: var(--taupe);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.1em;
 }
 
 /* Results bar */
@@ -959,7 +980,7 @@ section {
   font-family: var(--font-sans);
   font-size: 0.72rem;
   color: var(--taupe-light);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
 }
 
 .results-count strong {
@@ -969,7 +990,7 @@ section {
 
 .reset-filters-btn {
   font-family: var(--font-sans);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--blush-deep);
@@ -1078,7 +1099,7 @@ section {
   background: var(--charcoal);
   color: var(--white);
   font-family: var(--font-sans);
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   padding: 6px 12px;
@@ -1099,7 +1120,7 @@ section {
   background: var(--blush-deep);
   color: var(--white);
   font-family: var(--font-sans);
-  font-size: 0.58rem;
+  font-size: 0.75rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   padding: 5px 10px;
@@ -1136,7 +1157,7 @@ section {
 
 .card-category {
   font-family: var(--font-sans);
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -1174,7 +1195,7 @@ section {
 
 .card-tag {
   font-family: var(--font-sans);
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   color: var(--taupe-light);
   border: 1px solid var(--blush-light);
@@ -1190,9 +1211,9 @@ section {
 
 .sizes-label {
   font-family: var(--font-sans);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   color: var(--taupe-light);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
 }
 
 .sizes {
@@ -1203,9 +1224,9 @@ section {
 
 .size-dot {
   font-family: var(--font-sans);
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   color: var(--taupe);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
 }
 
 .card-arrow {
@@ -1298,7 +1319,7 @@ section {
 
 .modal-category {
   font-family: var(--font-sans);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--blush-deep);
@@ -1328,7 +1349,7 @@ section {
 
 .modal-sizes-label {
   font-family: var(--font-sans);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--taupe-light);
@@ -1350,7 +1371,7 @@ section {
   border: 1px solid var(--blush-light);
   font-family: var(--font-sans);
   font-size: 0.72rem;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
   color: var(--taupe);
   /* no cursor, no hover — informational only */
 }
@@ -1363,7 +1384,7 @@ section {
 
 .modal-tag {
   font-family: var(--font-sans);
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   color: var(--taupe-light);
   border: 1px solid var(--blush-light);
@@ -1467,7 +1488,7 @@ footer {
 
 .footer-col-title {
   font-family: var(--font-sans);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--taupe-light);
@@ -1511,7 +1532,7 @@ footer {
 }
 
 .footer-contact-line small {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--taupe-light);
@@ -1537,7 +1558,7 @@ footer {
   font-family: var(--font-sans);
   font-size: 0.72rem;
   color: var(--taupe-light);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
 }
 
 .footer-social {
@@ -1547,7 +1568,7 @@ footer {
 
 .footer-social a {
   font-family: var(--font-sans);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--taupe-light);
