@@ -15,10 +15,12 @@ const filters = {
   query:    '',
   priceMin: 0,
   priceMax: 5000,
-  sizes:    new Set(),   // selected sizes
-  brands:   new Set(),   // selected brands
-  newOnly:  false,
-  sort:     'default'
+  sizes:     new Set(),   // simple sizes (tights, panties)
+  bandSizes: new Set(),   // bra band sizes (70, 75, 80...)
+  cupSizes:  new Set(),   // bra cup sizes (A, B, C...)
+  brands:    new Set(),   // selected brands
+  newOnly:   false,
+  sort:      'default'
 };
 
 /* ── DOM Ready ──────────────────────────────────────────────── */
@@ -92,50 +94,137 @@ function buildCategoryTabs() {
     btn.addEventListener('click', () => {
       activeCategory = cat;
       document.querySelectorAll('.filter-tab').forEach(b => b.classList.toggle('active', b.dataset.category === cat));
+      // Clear size/brand selections and rebuild panels for new category
+      filters.sizes.clear();
+      filters.brands.clear();
+      filters.bandSizes.clear();
+      filters.cupSizes.clear();
+      buildSizeButtons();
+      buildBrandButtons();
       applyFilters();
     });
     container.appendChild(btn);
   });
 }
 
-/* ── Size Buttons ───────────────────────────────────────────── */
+/* ── Size Buttons (category-aware) ──────────────────────────── */
 function buildSizeButtons() {
-  const allSizes = [...new Set(
-    catalogData.products.flatMap(p => p.available_sizes || [])
-  )].sort((a, b) => {
-    const order = ['XS','S','M','L','XL','XXL','Plus'];
-    const ai = order.indexOf(a), bi = order.indexOf(b);
-    return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
-  });
-
   const container = document.getElementById('size-btn-group');
   container.innerHTML = '';
-  allSizes.forEach(size => {
-    const btn = document.createElement('button');
-    btn.className = 'size-btn';
-    btn.textContent = size;
-    btn.dataset.size = size;
-    btn.addEventListener('click', () => {
-      if (filters.sizes.has(size)) {
-        filters.sizes.delete(size);
-        btn.classList.remove('active');
-      } else {
-        filters.sizes.add(size);
-        btn.classList.add('active');
-      }
-      applyFilters();
+
+  // Get products for the active category
+  const relevantProducts = activeCategory === 'Все'
+    ? catalogData.products
+    : catalogData.products.filter(p => p.category === activeCategory);
+
+  const allSizes = [...new Set(relevantProducts.flatMap(p => p.available_sizes || []))];
+  if (allSizes.length === 0) return;
+
+  // Check if this is bra sizing (format: number+letter like 75B, 80C)
+  const isBraSizing = allSizes.some(s => /^\d{2,3}[A-Z]/.test(s));
+
+  if (isBraSizing) {
+    // Split into bands (70,75,80...) and cups (A,B,C...)
+    const bands = [...new Set(allSizes.map(s => s.match(/^(\d{2,3})/)?.[1]).filter(Boolean))]
+      .sort((a, b) => parseInt(a) - parseInt(b));
+    const cups = [...new Set(allSizes.map(s => s.match(/^\d{2,3}([A-ZА-Я]+)/)?.[1]).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b));
+
+    // Band row
+    const bandLabel = document.createElement('span');
+    bandLabel.className = 'size-sublabel';
+    bandLabel.textContent = 'Обхват';
+    container.appendChild(bandLabel);
+
+    const bandRow = document.createElement('div');
+    bandRow.className = 'size-subrow';
+    bands.forEach(band => {
+      const btn = document.createElement('button');
+      btn.className = 'size-btn';
+      btn.textContent = band;
+      btn.dataset.band = band;
+      btn.addEventListener('click', () => {
+        if (filters.bandSizes.has(band)) {
+          filters.bandSizes.delete(band);
+          btn.classList.remove('active');
+        } else {
+          filters.bandSizes.add(band);
+          btn.classList.add('active');
+        }
+        applyFilters();
+      });
+      bandRow.appendChild(btn);
     });
-    container.appendChild(btn);
-  });
+    container.appendChild(bandRow);
+
+    // Cup row
+    const cupLabel = document.createElement('span');
+    cupLabel.className = 'size-sublabel';
+    cupLabel.textContent = 'Чашка';
+    container.appendChild(cupLabel);
+
+    const cupRow = document.createElement('div');
+    cupRow.className = 'size-subrow';
+    cups.forEach(cup => {
+      const btn = document.createElement('button');
+      btn.className = 'size-btn';
+      btn.textContent = cup;
+      btn.dataset.cup = cup;
+      btn.addEventListener('click', () => {
+        if (filters.cupSizes.has(cup)) {
+          filters.cupSizes.delete(cup);
+          btn.classList.remove('active');
+        } else {
+          filters.cupSizes.add(cup);
+          btn.classList.add('active');
+        }
+        applyFilters();
+      });
+      cupRow.appendChild(btn);
+    });
+    container.appendChild(cupRow);
+  } else {
+    // Simple sizes (tights: 2,3,4,5,6 or panties: 36,38,40...)
+    const sorted = allSizes.sort((a, b) => {
+      const na = parseInt(a), nb = parseInt(b);
+      if (!isNaN(na) && !isNaN(nb)) return na - nb;
+      return a.localeCompare(b);
+    });
+    sorted.forEach(size => {
+      const btn = document.createElement('button');
+      btn.className = 'size-btn';
+      btn.textContent = size;
+      btn.dataset.size = size;
+      btn.addEventListener('click', () => {
+        if (filters.sizes.has(size)) {
+          filters.sizes.delete(size);
+          btn.classList.remove('active');
+        } else {
+          filters.sizes.add(size);
+          btn.classList.add('active');
+        }
+        applyFilters();
+      });
+      container.appendChild(btn);
+    });
+  }
 }
 
-/* ── Brand Buttons ──────────────────────────────────────────── */
+/* ── Brand Buttons (category-aware) ────────────────────────── */
 function buildBrandButtons() {
-  const brands = catalogData.brands ||
-    [...new Set(catalogData.products.map(p => p.brand).filter(Boolean))];
-
   const container = document.getElementById('brand-btn-group');
   container.innerHTML = '';
+
+  // Get products for the active category
+  const relevantProducts = activeCategory === 'Все'
+    ? catalogData.products
+    : catalogData.products.filter(p => p.category === activeCategory);
+
+  // Extract unique brands from relevant products only
+  const brands = [...new Set(relevantProducts.map(p => p.brand).filter(Boolean))].sort();
+
+  if (brands.length === 0) return;
+
   brands.forEach(brand => {
     const btn = document.createElement('button');
     btn.className = 'brand-btn';
@@ -253,6 +342,8 @@ function resetFilters() {
   filters.priceMin = 0;
   filters.priceMax = parseInt(document.getElementById('price-max').max);
   filters.sizes.clear();
+  filters.bandSizes.clear();
+  filters.cupSizes.clear();
   filters.brands.clear();
   filters.newOnly  = false;
   filters.sort     = 'default';
@@ -265,10 +356,11 @@ function resetFilters() {
   document.getElementById('price-max').value = filters.priceMax;
   document.getElementById('sort-select').value = 'default';
   document.getElementById('new-only-check').checked = false;
-  document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.brand-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.filter-tab').forEach(b => b.classList.toggle('active', b.dataset.category === 'Все'));
 
+  // Rebuild panels for 'All' category
+  buildSizeButtons();
+  buildBrandButtons();
   initPriceSlider();
   applyFilters();
 }
@@ -298,11 +390,26 @@ function applyFilters() {
     return price >= filters.priceMin && price <= filters.priceMax;
   });
 
-  // 4. Size
+  // 4. Size (simple sizes like 2,3,4 or 36,38,40)
   if (filters.sizes.size > 0) {
     products = products.filter(p =>
       (p.available_sizes || []).some(s => filters.sizes.has(s))
     );
+  }
+
+  // 4b. Bra sizes (band + cup composite filter)
+  if (filters.bandSizes.size > 0 || filters.cupSizes.size > 0) {
+    products = products.filter(p => {
+      const sizes = p.available_sizes || [];
+      return sizes.some(s => {
+        const match = s.match(/^(\d{2,3})([A-ZА-Я]+)/);
+        if (!match) return false;
+        const [, band, cup] = match;
+        const bandOk = filters.bandSizes.size === 0 || filters.bandSizes.has(band);
+        const cupOk  = filters.cupSizes.size === 0 || filters.cupSizes.has(cup);
+        return bandOk && cupOk;
+      });
+    });
   }
 
   // 5. Brand
@@ -420,6 +527,8 @@ function updateResetBtn() {
   const isDefault =
     filters.query === '' &&
     filters.sizes.size === 0 &&
+    filters.bandSizes.size === 0 &&
+    filters.cupSizes.size === 0 &&
     filters.brands.size === 0 &&
     !filters.newOnly &&
     filters.sort === 'default' &&
