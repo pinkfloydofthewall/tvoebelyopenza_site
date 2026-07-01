@@ -513,7 +513,6 @@ function createProductCard(product, idx) {
     <div class="card-body">
       <p class="card-category">${product.category}${product.brand ? ' · ' + product.brand : ''}</p>
       <h3 class="card-name">${product.name}</h3>
-      <p class="card-desc">${product.description}</p>
       <div class="card-tags">${colorHTML}</div>
     </div>
     <div class="card-footer">
