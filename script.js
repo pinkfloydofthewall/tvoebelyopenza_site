@@ -410,6 +410,10 @@ function resetFilters() {
 }
 
 /* ── Core Filter & Sort Logic ───────────────────────────────── */
+let currentFilteredProducts = [];
+let currentPage = 1;
+const itemsPerPage = 12;
+
 function applyFilters() {
   let products = [...catalogData.products];
 
@@ -469,7 +473,9 @@ function applyFilters() {
   // 7. Sort
   products = sortProducts(products, filters.sort);
 
-  renderProducts(products);
+  currentFilteredProducts = products;
+  currentPage = 1;
+  renderProducts(true);
   updateResultsBar(products.length);
   updateResetBtn();
 }
@@ -488,28 +494,58 @@ function sortProducts(products, sort) {
 
 /* ── Render Products ─────────────────────────────────────────── */
 function buildProductGrid() {
-  renderProducts(catalogData.products);
+  currentFilteredProducts = catalogData.products;
+  currentPage = 1;
+  renderProducts(true);
   updateResultsBar(catalogData.products.length);
 }
 
-function renderProducts(products) {
+function renderProducts(clear = false) {
   const grid = document.getElementById('products-grid');
   const emptyState = document.getElementById('empty-state');
+  let loadMoreBtn = document.getElementById('load-more-btn');
 
-  // Remove old cards (keep empty-state)
-  grid.querySelectorAll('.product-card').forEach(c => c.remove());
+  // Create load more button if it doesn't exist
+  if (!loadMoreBtn) {
+    loadMoreBtn = document.createElement('button');
+    loadMoreBtn.id = 'load-more-btn';
+    loadMoreBtn.className = 'btn load-more-btn';
+    loadMoreBtn.textContent = 'Показать еще';
+    loadMoreBtn.onclick = () => {
+      currentPage++;
+      renderProducts(false);
+    };
+    grid.parentNode.insertBefore(loadMoreBtn, grid.nextSibling);
+  }
 
-  if (products.length === 0) {
+  if (clear) {
+    // Remove old cards (keep empty-state)
+    grid.querySelectorAll('.product-card').forEach(c => c.remove());
+  }
+
+  if (currentFilteredProducts.length === 0) {
     emptyState.classList.add('visible');
+    loadMoreBtn.style.display = 'none';
     return;
   }
   emptyState.classList.remove('visible');
 
-  products.forEach((product, idx) => {
-    const card = createProductCard(product, idx);
+  // Determine slice
+  const startIndex = clear ? 0 : (currentPage - 1) * itemsPerPage;
+  const endIndex = currentPage * itemsPerPage;
+  const productsToShow = currentFilteredProducts.slice(startIndex, endIndex);
+
+  productsToShow.forEach((product, idx) => {
+    const card = createProductCard(product, startIndex + idx);
     grid.appendChild(card);
   });
-  // No initReveal() here — cards appear instantly when filtering
+
+  // Toggle load more button
+  if (endIndex >= currentFilteredProducts.length) {
+    loadMoreBtn.style.display = 'none';
+  } else {
+    loadMoreBtn.style.display = 'block';
+  }
 }
 
 function createProductCard(product, idx) {
