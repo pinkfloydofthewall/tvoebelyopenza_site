@@ -21,6 +21,10 @@ def compress_images():
         filepath = os.path.join(IMAGE_DIR, filename)
         original_size = os.path.getsize(filepath)
         
+        # Skip hero image to preserve high quality
+        if filename == 'A_wide-angle_professional_photography_of_202606230213.jpeg':
+            continue
+
         # Пропускаем файлы меньше 300 КБ (они и так лёгкие)
         if original_size < 300 * 1024:
             continue
