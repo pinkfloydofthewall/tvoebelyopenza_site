@@ -643,10 +643,24 @@ function initPage() {
   initNewOnly();
   initResetBtn();
 
-  // Nav links smooth scroll
+  // Mobile Menu Toggle
+  const menuBtn = document.getElementById('nav-menu-btn');
+  const navLinks = document.querySelector('.nav-links');
+  if (menuBtn && navLinks) {
+    menuBtn.addEventListener('click', () => {
+      menuBtn.classList.toggle('active');
+      navLinks.classList.toggle('active');
+    });
+  }
+
+  // Nav links smooth scroll & close mobile menu
   document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', e => {
       e.preventDefault();
+      
+      if (menuBtn) menuBtn.classList.remove('active');
+      if (navLinks) navLinks.classList.remove('active');
+
       const target = document.querySelector(link.getAttribute('href'));
       if (target) target.scrollIntoView({ behavior: 'smooth' });
     });

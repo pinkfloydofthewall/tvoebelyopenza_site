@@ -232,7 +232,8 @@ nav.scrolled .nav-links a:hover {
   width: 24px;
   height: 1px;
   background: var(--white);
-  transition: background 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease;
+  transform-origin: center;
 }
 
 nav.scrolled .nav-menu-btn span {
@@ -1094,8 +1095,8 @@ section {
 .card-price {
   display: block;
   font-family: var(--font-serif);
-  font-size: 1.05rem;
-  font-weight: 400;
+  font-size: 1.35rem;
+  font-weight: 500;
   color: var(--charcoal);
   margin-bottom: 4px;
   line-height: 1;
@@ -1608,10 +1609,41 @@ footer {
 
   .nav-links {
     display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--cream);
+    padding: 30px 24px;
+    gap: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .nav-links a {
+    color: var(--charcoal) !important;
+    font-size: 0.9rem;
   }
 
   .nav-menu-btn {
     display: flex;
+    z-index: 100;
+  }
+
+  .nav-menu-btn.active span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+    background: var(--charcoal) !important;
+  }
+  .nav-menu-btn.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-menu-btn.active span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+    background: var(--charcoal) !important;
   }
 
   section {
