@@ -282,7 +282,18 @@ const server = http.createServer((req, res) => {
             }
           }
 
-          const sizeArr = Array.from(msp.sizes).sort();
+          const sizeArr = Array.from(msp.sizes).sort((a, b) => {
+            const clothes = { 'XXS':1, 'XS':2, 'S':3, 'M':4, 'L':5, 'XL':6, 'XXL':7, 'XXXL':8, '3XL':8, '4XL':9 };
+            function getWeight(s) {
+              if (clothes[s]) return clothes[s];
+              const match = s.match(/^(\d+)([A-Z]*)$/);
+              if (match) {
+                return 1000 + parseInt(match[1], 10) * 100 + (match[2] ? match[2].charCodeAt(0) : 0);
+              }
+              return 100000;
+            }
+            return getWeight(a) - getWeight(b);
+          });
           const colorStr = Array.from(msp.colors).join(', ');
 
           if (p) {

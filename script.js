@@ -519,7 +519,7 @@ function createProductCard(product, idx) {
   card.setAttribute('data-id', product.id);
 
   const colorHTML = product.color ? `<span class="card-tag" style="background:var(--rose-glow); border:1px solid rgba(201,160,160,.3); color:var(--rose);">Цвет: ${product.color}</span>` : '';
-  const sizesHTML = (product.available_sizes || []).join(' · ');
+  const sizesHTML = (product.available_sizes || []).slice().sort(sortSizes).join(' · ');
   const priceHTML = product.price
     ? `<span class="card-price">${formatPrice(product.price)}</span>`
     : '';
@@ -598,7 +598,7 @@ function openModal(productId) {
   if (priceEl) priceEl.textContent = product.price ? formatPrice(product.price) : '';
 
   const sizesEl = document.getElementById('modal-sizes');
-  sizesEl.innerHTML = (product.available_sizes || [])
+  sizesEl.innerHTML = (product.available_sizes || []).slice().sort(sortSizes)
     .map(s => `<div class="modal-size">${s}</div>`)
     .join('');
   // Sizes are informational only — no selection in catalog mode
@@ -722,4 +722,17 @@ function getFallbackData() {
       { "id": 6, "name": "Бралет «Fleur»",   "category": "Бюстгальтеры","brand": "Другие",  "price": 1750, "new": true,  "description": "Тюль с цветочной вышивкой.",       "image": "images/product_6.png", "tags": ["Тюль","Вышивка"], "available_sizes": ["XS","S","M"], "featured": false }
     ]
   };
+}
+
+function sortSizes(a, b) {
+  const clothes = { 'XXS':1, 'XS':2, 'S':3, 'M':4, 'L':5, 'XL':6, 'XXL':7, 'XXXL':8, '3XL':8, '4XL':9 };
+  function getWeight(s) {
+    if (clothes[s]) return clothes[s];
+    const match = s.match(/^(\d+)([A-Z]*)$/);
+    if (match) {
+      return 1000 + parseInt(match[1], 10) * 100 + (match[2] ? match[2].charCodeAt(0) : 0);
+    }
+    return 100000;
+  }
+  return getWeight(a) - getWeight(b);
 }
