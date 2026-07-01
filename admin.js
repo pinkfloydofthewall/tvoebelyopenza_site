@@ -242,7 +242,6 @@ function initProductModal() {
   });
 
   // Chip inputs
-  initChipInput('tags-input', 'tags-wrap');
   initChipInput('sizes-input', 'sizes-wrap');
 
   // Image upload
@@ -278,7 +277,6 @@ function openEditModal(id) {
   document.getElementById('product-featured').checked = !!product.featured;
 
   // Load chips
-  setChips('tags-wrap', 'tags-input', product.tags || []);
   setChips('sizes-wrap', 'sizes-input', product.available_sizes || []);
 
   // Preview existing image
@@ -305,7 +303,6 @@ function clearProductForm() {
   document.getElementById('product-color').value = '';
   document.getElementById('product-description').value = '';
   document.getElementById('product-featured').checked = false;
-  setChips('tags-wrap', 'tags-input', []);
   setChips('sizes-wrap', 'sizes-input', []);
   clearImagePreview();
 }
@@ -320,7 +317,6 @@ async function saveProduct() {
   if (!name) { toast('Введите название товара', 'error'); return; }
   if (!category) { toast('Выберите категорию', 'error'); return; }
 
-  const tags  = getChips('tags-wrap');
   const sizes = getChips('sizes-wrap');
   const desc  = document.getElementById('product-description').value.trim();
   const featured = document.getElementById('product-featured').checked;
@@ -340,7 +336,7 @@ async function saveProduct() {
         data.products[idx] = {
           ...data.products[idx],
           name, category, price, color, description: desc,
-          tags, available_sizes: sizes,
+          available_sizes: sizes,
           featured, image: imagePath,
         };
       }
@@ -351,7 +347,7 @@ async function saveProduct() {
         id: maxId + 1,
         name, category, price, color, description: desc,
         image: imagePath,
-        tags, available_sizes: sizes, featured,
+        available_sizes: sizes, featured,
       });
     }
 

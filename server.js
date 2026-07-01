@@ -210,8 +210,11 @@ const server = http.createServer((req, res) => {
         const msProducts = {}; // id -> product
 
         // First pass: collect products
+        const badBrands = /balaloum|dsmr|ubra|venus|weiyesi/i;
         for (const row of allRows) {
           if (row.meta.type === 'product') {
+            if (badBrands.test(row.name)) continue;
+            
             msProducts[row.id] = {
               name: row.name,
               price: row.salePrices && row.salePrices[0] ? row.salePrices[0].value / 100 : null,

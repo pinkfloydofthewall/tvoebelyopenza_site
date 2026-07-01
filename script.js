@@ -288,7 +288,6 @@ function applyFilters() {
     products = products.filter(p =>
       p.name.toLowerCase().includes(q) ||
       (p.description || '').toLowerCase().includes(q) ||
-      (p.tags || []).some(t => t.toLowerCase().includes(q)) ||
       (p.brand || '').toLowerCase().includes(q)
     );
   }
@@ -369,7 +368,6 @@ function createProductCard(product, idx) {
   card.setAttribute('data-id', product.id);
 
   const colorHTML = product.color ? `<span class="card-tag" style="background:var(--rose-glow); border:1px solid rgba(201,160,160,.3); color:var(--rose);">Цвет: ${product.color}</span>` : '';
-  const tagsHTML = (product.tags || []).map(t => `<span class="card-tag">${t}</span>`).join('');
   const sizesHTML = (product.available_sizes || []).join(' · ');
   const priceHTML = product.price
     ? `<span class="card-price">${formatPrice(product.price)}</span>`
@@ -388,7 +386,7 @@ function createProductCard(product, idx) {
       <p class="card-category">${product.category}${product.brand ? ' · ' + product.brand : ''}</p>
       <h3 class="card-name">${product.name}</h3>
       <p class="card-desc">${product.description}</p>
-      <div class="card-tags">${colorHTML}${tagsHTML}</div>
+      <div class="card-tags">${colorHTML}</div>
     </div>
     <div class="card-footer">
       <div>
@@ -453,9 +451,10 @@ function openModal(productId) {
     .join('');
   // Sizes are informational only — no selection in catalog mode
 
-  const tagsEl = document.getElementById('modal-tags');
-  const colorHTML = product.color ? `<span class="modal-tag" style="background:var(--rose-glow); border:1px solid rgba(201,160,160,.3); color:var(--rose);">Цвет: ${product.color}</span>` : '';
-  tagsEl.innerHTML = colorHTML + (product.tags || []).map(t => `<span class="modal-tag">${t}</span>`).join('');
+  const tagsEl = document.getElementById('modal-color');
+  if (tagsEl) {
+    tagsEl.innerHTML = product.color ? `<span class="modal-tag" style="background:var(--rose-glow); border:1px solid rgba(201,160,160,.3); color:var(--rose);">Цвет: ${product.color}</span>` : '';
+  }
 
   const b = catalogData.brand;
   document.getElementById('modal-contact-text').textContent = b.contact_text;
