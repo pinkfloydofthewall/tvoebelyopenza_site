@@ -1381,6 +1381,50 @@ section {
   border-color: var(--blush-deep);
 }
 
+/* ── Modal Share Button ─────────────────────────────────────── */
+.modal-share {
+  margin-top: 16px;
+}
+
+.modal-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid var(--blush-light);
+  border-radius: 50px;
+  background: transparent;
+  color: var(--blush-deep);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.35s var(--transition-elegant);
+}
+
+.modal-share-btn:hover {
+  background: var(--blush-deep);
+  color: var(--white);
+  border-color: var(--blush-deep);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(168, 90, 106, 0.25);
+}
+
+.modal-share-btn:hover svg {
+  stroke: var(--white);
+}
+
+.modal-share-btn.copied {
+  background: #4a9e6e;
+  border-color: #4a9e6e;
+  color: var(--white);
+}
+
+.modal-share-btn.copied svg {
+  stroke: var(--white);
+}
+
 /* ── Story / Philosophy Section ───────────────────────────── */
 .philosophy {
   background: var(--charcoal);

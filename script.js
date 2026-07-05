@@ -621,6 +621,9 @@ function openModal(productId) {
   if (!product) return;
   activeProductId = productId;
 
+  // Update URL hash for deep linking (without scrolling)
+  history.replaceState(null, '', '#product-' + productId);
+
   const backdrop = document.getElementById('modal-backdrop');
   document.getElementById('modal-image').src = product.image;
   document.getElementById('modal-image').alt = product.name;
@@ -644,6 +647,33 @@ function openModal(productId) {
     tagsEl.innerHTML = product.color ? `<span class="modal-tag" style="background:var(--rose-glow); border:1px solid rgba(201,160,160,.3); color:var(--rose);">Цвет: ${product.color}</span>` : '';
   }
 
+  // Share / copy link button
+  const shareEl = document.getElementById('modal-share');
+  if (shareEl) {
+    const productUrl = window.location.origin + window.location.pathname + '#product-' + productId;
+    shareEl.innerHTML = `
+      <button class="modal-share-btn" id="modal-copy-link-btn" aria-label="Скопировать ссылку на товар">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </svg>
+        <span>Скопировать ссылку</span>
+      </button>
+    `;
+    document.getElementById('modal-copy-link-btn').addEventListener('click', () => {
+      navigator.clipboard.writeText(productUrl).then(() => {
+        const btn = document.getElementById('modal-copy-link-btn');
+        const span = btn.querySelector('span');
+        span.textContent = 'Ссылка скопирована!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          span.textContent = 'Скопировать ссылку';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  }
+
   const b = catalogData.brand;
   document.getElementById('modal-contact-text').textContent = b.contact_text;
   const instaEl = document.getElementById('modal-instagram');
@@ -660,6 +690,21 @@ function closeModal() {
   document.getElementById('modal-backdrop').classList.remove('open');
   document.body.style.overflow = '';
   activeProductId = null;
+  // Clear hash without scrolling
+  history.replaceState(null, '', window.location.pathname);
+}
+
+/* ── Deep Link: open product from URL hash ──────────────────── */
+function checkDeepLink() {
+  const hash = window.location.hash;
+  if (!hash || !hash.startsWith('#product-')) return;
+  const id = parseInt(hash.replace('#product-', ''), 10);
+  if (isNaN(id)) return;
+  const product = catalogData.products.find(p => p.id === id);
+  if (product) {
+    // Small delay to ensure the page is fully rendered
+    setTimeout(() => openModal(id), 300);
+  }
 }
 
 /* ── Init Page ───────────────────────────────────────────────── */
@@ -720,6 +765,20 @@ function initPage() {
 
   // Initial filter apply
   applyFilters();
+
+  // Check for deep link (e.g. #product-42)
+  checkDeepLink();
+
+  // Handle browser back/forward with hash changes
+  window.addEventListener('hashchange', () => {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#product-')) {
+      const id = parseInt(hash.replace('#product-', ''), 10);
+      if (!isNaN(id)) openModal(id);
+    } else {
+      closeModal();
+    }
+  });
 }
 
 /* ── Scroll ──────────────────────────────────────────────────── */
