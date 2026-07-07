@@ -1743,8 +1743,40 @@ footer {
     padding: 80px 24px;
   }
 
+  .hero {
+    min-height: 600px;
+  }
+
+  .hero-image {
+    background-position: 70% top;
+  }
+
+  .hero-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(44, 30, 35, 0.45) 0%,
+        rgba(44, 30, 35, 0.25) 30%,
+        rgba(44, 30, 35, 0.55) 70%,
+        rgba(44, 30, 35, 0.80) 100%
+      );
+  }
+
   .hero-content {
     padding: 0 24px 60px;
+  }
+
+  .hero-title {
+    font-size: clamp(2.2rem, 9vw, 3.5rem);
+    color: var(--white);
+  }
+
+  .hero-eyebrow {
+    color: rgba(255,255,255,0.8);
+  }
+
+  .hero-subtitle {
+    color: rgba(255,255,255,0.75);
   }
 
   .hero-scroll-hint {
